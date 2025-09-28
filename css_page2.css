@@ -1,0 +1,102 @@
+/* بسيط ومرن - ضع هذا الملف في css/page2.css */
+:root{
+  --bg:#111;
+  --card:#111;
+  --accent:#c92;
+  --text:#eee;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #f6f6f6;
+  color:var(--text);
+  line-height:1.4;
+  padding:20px;
+}
+.page { direction: rtl; }
+
+.site-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+.site-header h1{ margin:0; color:#222; font-size:1.4rem; }
+.site-header .btn{
+  text-decoration:none;
+  background:#efefef;
+  color:#222;
+  padding:8px 12px;
+  border-radius:6px;
+  border:1px solid #ddd;
+  font-size:0.95rem;
+}
+
+.content{
+  max-width:980px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#fff,#fff);
+  padding:18px;
+  border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  color:#222;
+}
+
+.intro{ margin-top:0; margin-bottom:12px; color:#444; }
+
+/* gallery */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+  gap:16px;
+}
+.item{
+  background:#fff;
+  border-radius:8px;
+  padding:8px;
+  text-align:center;
+  border:1px solid #eee;
+}
+.item img{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:0 auto;
+  border-radius:6px;
+  cursor:zoom-in;
+  transition:transform .18s ease;
+}
+.item img:hover{ transform:scale(1.02); }
+.item figcaption{ margin-top:8px; color:#666; font-size:0.95rem; }
+
+/* modal */
+.modal{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.6);
+  visibility:hidden;
+  opacity:0;
+  transition:opacity .18s ease, visibility .18s;
+  z-index:9999;
+}
+.modal.open{ visibility:visible; opacity:1; }
+.modal img{ max-width:92%; max-height:86%; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,0.6) }
+.modal-close{
+  position:fixed;
+  right:20px;
+  top:16px;
+  font-size:28px;
+  background:transparent;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+}
+@media (max-width:520px){
+  .site-header{ flex-direction:column; align-items:flex-start; gap:8px;}
+}

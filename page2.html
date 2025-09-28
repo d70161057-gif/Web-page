@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>صفحة الصور</title>
+  <link rel="stylesheet" href="css/page2.css" />
+</head>
+<body dir="rtl" class="page">
+  <header class="site-header">
+    <h1>مجموعة الصور</h1>
+    <nav>
+      <a href="index.html" class="btn">العودة للصفحة الرئيسية</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <p class="intro">هذه الصور التي أرسلتها — انقر على أي صورة لمشاهدتها بحجم أكبر.</p>
+
+    <div class="gallery">
+      <figure class="item">
+        <img src="images/image1.png" alt="صورة 1" loading="lazy" />
+        <figcaption>صورة 1</figcaption>
+      </figure>
+
+      <figure class="item">
+        <img src="images/image2.png" alt="صورة 2" loading="lazy" />
+        <figcaption>صورة 2</figcaption>
+      </figure>
+    </div>
+  </main>
+
+  <!-- Simple modal for larger preview -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <button id="modalClose" class="modal-close" aria-label="إغلاق">×</button>
+    <img id="modalImg" src="" alt="تكبير الصورة" />
+  </div>
+
+  <script>
+    (function () {
+      const modal = document.getElementById('modal');
+      const modalImg = document.getElementById('modalImg');
+      const modalClose = document.getElementById('modalClose');
+
+      document.querySelectorAll('.gallery img').forEach(img => {
+        img.addEventListener('click', () => {
+          modalImg.src = img.src;
+          modal.setAttribute('aria-hidden', 'false');
+          modal.classList.add('open');
+        });
+      });
+
+      modalClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      function closeModal() {
+        modal.setAttribute('aria-hidden', 'true');
+        modal.classList.remove('open');
+        modalImg.src = '';
+      }
+    })();
+  </script>
+</body>
+</html>
