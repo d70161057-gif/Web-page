@@ -1,0 +1,225 @@
+:root{
+  --bg1: #0f172a;
+  --bg2: #0b1220;
+  --accent: #60a5fa;
+  --size-cube: 140px;
+  --size-pyramid: 150px;
+  --size-sphere: 130px;
+  --size-cylinder: 140px;
+  --duration: 6s;
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family: "Tajawal", "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:#e6eef8;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Container */
+.container{
+  max-width:1100px;
+  margin:40px auto;
+  padding:24px;
+  text-align:center;
+  direction:rtl;
+}
+
+h1{margin:0 0 18px;font-size:1.7rem}
+.shapes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:28px;
+  align-items:start;
+}
+
+/* Scene / perspective */
+.scene{
+  width:100%;
+  height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:900px;
+  -webkit-perspective:900px;
+  pointer-events:auto;
+}
+
+/* Generic rotating wrapper used by shapes */
+.shape-rotator{
+  transform-style:preserve-3d;
+  will-change:transform;
+  animation:rotate var(--duration) linear infinite;
+  transition:transform 300ms;
+}
+
+/* Pause animation when container has .paused */
+.scene.paused .shape-rotator{ animation-play-state:paused }
+
+/* Animation */
+@keyframes rotate{
+  from{ transform: rotateX(-20deg) rotateY(0deg) }
+  to{   transform: rotateX(-20deg) rotateY(360deg) }
+}
+
+/* --- CUBE --- */
+.cube{
+  width:var(--size-cube);
+  height:var(--size-cube);
+  position:relative;
+}
+.cube .face{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,#134e8a,#60a5fa 70%);
+  opacity:0.98;
+  border:1px solid rgba(255,255,255,0.06);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.8rem;
+  color:rgba(255,255,255,0.9);
+  backface-visibility:hidden;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+}
+
+/* Position cube faces */
+.cube .front  { transform: translateZ(calc(var(--size-cube)/2)); }
+.cube .back   { transform: rotateY(180deg) translateZ(calc(var(--size-cube)/2)); }
+.cube .right  { transform: rotateY(90deg) translateZ(calc(var(--size-cube)/2)); }
+.cube .left   { transform: rotateY(-90deg) translateZ(calc(var(--size-cube)/2)); }
+.cube .top    { transform: rotateX(90deg) translateZ(calc(var(--size-cube)/2)); }
+.cube .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size-cube)/2)); }
+
+/* --- PYRAMID --- */
+.pyramid{
+  width:var(--size-pyramid);
+  height:var(--size-pyramid);
+  position:relative;
+  transform-style:preserve-3d;
+  margin-top:10px;
+}
+
+/* Base (متوافق مع HTML المحدث) */
+.pyramid .base{
+  position:absolute;
+  width:70%;
+  height:70%;
+  left:15%;
+  top:54%;
+  transform:translateY(-50%) rotateX(90deg) translateZ(calc(var(--size-pyramid)*-0.15));
+  background:linear-gradient(135deg,#7c3aed,#c084fc);
+  opacity:0.95;
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+/* Triangular faces created with transform and skewed squares to simulate triangles */
+.pyramid .face{
+  position:absolute;
+  left:50%;
+  top:45%;
+  width:0;
+  height:0;
+  border-left: calc(var(--size-pyramid)/2) solid transparent;
+  border-right: calc(var(--size-pyramid)/2) solid transparent;
+  border-bottom: calc(var(--size-pyramid)/1.2) solid rgba(96,165,250,0.95);
+  transform-origin:50% 0;
+  backface-visibility:hidden;
+  filter:drop-shadow(0 10px 20px rgba(2,6,23,0.45));
+}
+.pyramid .face.front  { transform: translate(-50%,-50%) rotateX(12deg) translateZ(10px); background:transparent; }
+.pyramid .face.back   { transform: translate(-50%,-50%) rotateY(180deg) translateZ(10px); background:transparent; }
+.pyramid .face.left   { transform: translate(-50%,-50%) rotateY(-90deg) translateZ(10px); background:transparent; }
+.pyramid .face.right  { transform: translate(-50%,-50%) rotateY(90deg) translateZ(10px); background:transparent; }
+
+.pyramid .face::after{
+  content:"";
+  position:absolute; left:-50%; top:-100%;
+  width:200%; height:200%;
+  background:linear-gradient(180deg, rgba(124,58,237,0.95), rgba(96,165,250,0.85));
+  clip-path:polygon(50% 0,100% 100%,0 100%);
+  transform:translateZ(-1px);
+}
+
+/* --- SPHERE --- */
+.sphere{
+  width:var(--size-sphere);
+  height:var(--size-sphere);
+  border-radius:50%;
+  background: radial-gradient(circle at 30% 25%, #ffffff 0%, rgba(255,255,255,0.9) 6%, rgba(96,165,250,0.95) 25%, #0f172a 100%);
+  box-shadow: inset -10px -8px 30px rgba(0,0,0,0.6), 0 12px 40px rgba(2,6,23,0.7);
+  transform-style:preserve-3d;
+}
+
+/* Add subtle rotation on sphere by animating the background position */
+.sphere{ animation: sphere-rotate var(--duration) linear infinite; }
+@keyframes sphere-rotate{
+  from{ transform: rotateY(0deg) rotateX(0deg) }
+  to{ transform: rotateY(360deg) rotateX(15deg) }
+}
+
+/* --- CYLINDER --- */
+.cylinder{
+  width:var(--size-cylinder);
+  height:var(--size-cylinder);
+  position:relative;
+  transform-style:preserve-3d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cylinder .side{
+  width:calc(var(--size-cylinder) * 0.65);
+  height:calc(var(--size-cylinder) * 1.0);
+  background:linear-gradient(90deg,#60a5fa,#7c3aed);
+  border-radius:50px;
+  transform:rotateX(90deg) translateZ(calc(var(--size-cylinder) * 0.17));
+  box-shadow: 0 14px 30px rgba(2,6,23,0.6);
+  opacity:0.95;
+}
+.cylinder .top, .cylinder .bottom{
+  position:absolute;
+  width:calc(var(--size-cylinder) * 0.65);
+  height:calc(var(--size-cylinder) * 0.65);
+  border-radius:50%;
+  background:linear-gradient(180deg,#7c3aed,#60a5fa);
+  left:50%;
+  transform:translateX(-50%);
+  border:1px solid rgba(255,255,255,0.06);
+}
+.cylinder .top{ top:18%; transform:translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--size-cylinder) * 0.33)); }
+.cylinder .bottom{ bottom:18%; transform:translate(-50%, 50%) rotateX(90deg) translateZ(calc(var(--size-cylinder) * -0.33)); }
+
+/* Labels */
+.shape-container h2{
+  margin:12px 0 0;
+  font-size:1.05rem;
+  color:#dbeafe;
+}
+
+/* Hover / focus affordance */
+.shape-container{ cursor:pointer; user-select:none; }
+
+/* Responsive adjustments */
+@media (max-width:520px){
+  .scene{ height:180px }
+  :root{ --size-cube:110px; --size-pyramid:120px; --size-sphere:100px; --size-cylinder:110px; }
+}
+
+/* احترم تفضيل المستخدم لتقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration: 0s; }
+  .shape-rotator, .sphere { animation: none !important; transition: none !important; }
+}
+
+/* تقليل الظلال على الشاشات الصغيرة أو للأداء */
+@media (max-width: 520px) {
+  .cube .face, .pyramid .face::after, .sphere {
+    box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+  }
+}
